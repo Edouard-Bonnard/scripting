@@ -1,5 +1,7 @@
-# -*- Python 3.8.2 -*-
-# coding UTF-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# written in Python 3.8.2
+
 
 #####
 
@@ -37,8 +39,6 @@ file_name = 'DAQ- Crosshead; … - (Timed).txt' #name of the files to get
 
 #Get the sub directories list
 sub_directories = [d for d in listdir(dir) if isdir(join(dir, d))]
-
-print(len(sub_directories),' sub folder(s) found')
 
 cpt_files = 0
 
@@ -116,8 +116,7 @@ for a in range(len(sub_directories)):
         xls_file.save(xls_file_name) #save
 
         file.close()
-    else:
-        print('no', file_name, ' in directory')
+    
 
 print(cpt_files, ' .txt file(s) processed to .xls')
 print('#####')
