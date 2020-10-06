@@ -1,8 +1,11 @@
-# to ignore by git
+#To ignore by git
 
 .DS_Store
+.vscode
 
-123_ 8.xls
+#Ignore all .xls files
+*.xls
 
-Met1/
+#Ignore all .txt files
+*.txt
 
