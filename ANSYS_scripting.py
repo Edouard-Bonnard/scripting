@@ -32,22 +32,19 @@ print(sub_directories)
 #sub directories loops
 for a in range(len(sub_directories)):
 
-    SAP_ID = sub_directories[a]
-
-    print('SAP ID : '+ SAP_ID) #to delete
-
     file_path = sub_directories[a] + '/' + file_name #path creation
     file = open(file_path, "r", encoding = 'utf8') #file loading
 
     lines = file.readlines() #whole file is loaded in lines
 
+    #Properties to fill in Info sheet
+    SAP_ID = sub_directories[a]
     Test_Machine_ID = lines[1][10:-1] #removal of \n
     Date = lines[2][6:-1] #removal of \n
     Original_file = os.path.abspath(file_path) #absolute path
     Test_ID = SAP_ID + '-' + Test_Machine_ID #concatenation of labels
 
     # Writing in Info sheet of Excel File
-
     #Excel file creation
     xls_file = xlwt.Workbook()
     info = xls_file.add_sheet("Info")
@@ -56,33 +53,53 @@ for a in range(len(sub_directories)):
     #Filling of info values
     info.write(0,0,'Property')
     info.write(0,1,'Value')
-
     info.write(1,0,'Material')
     info.write(1,1,Material)
-
     info.write(2,0,'Grade')
     info.write(2,1,Grade)
-
     info.write(3,0,'Supplier')
     info.write(3,1,Supplier)
-
     info.write(4,0,'SAP ID')
     info.write(4,1,SAP_ID)
-
     info.write(5,0,'Test')
     info.write(5,1,Test)
-
     info.write(6,0,'Test Machine ID')
     info.write(6,1,Test_Machine_ID)
-
     info.write(7,0,'Date')
     info.write(7,1,Date)
-
     info.write(8,0,'Original File')
     info.write(8,1,Original_file)
-
     info.write(9,0,'Test ID')
     info.write(9,1,Test_ID)
+
+    #Filling of data values
+    data.write(0,0,'Crosshead (mm)')
+    data.write(0,1,'Load (kN)')
+    data.write(0,2,'Time (s)')
+    data.write(0,3,'Video Time (s)')
+    data.write(0,4,'Axial Strain (mm/mm)')
+    data.write(0,5,'Transverse (mm/mm)')
+
+    xls_line = 1 #line in Excel file 
+
+    for i in range(7, len(lines)):
+        line = lines[i].split() #space séparation
+        
+        xls_row = 0 #row in Excel file
+        for j in line:
+            data.write(xls_line,xls_row,j)
+            xls_row+=1
+        
+        xls_line+=1
+
+
+
+        #data.write(a, 0,'value')
+
+
+
+
+
 
     #Saving file
     xls_file_name = Test_Machine_ID + '.xls' #name of the file
