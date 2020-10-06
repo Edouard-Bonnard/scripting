@@ -1,40 +1,47 @@
 # -*- Python 3.8.2 -*-
 # coding UTF-8
 
+#####
+
 # ANSYS Scripting Assignment
-# script to execute in Met1 directory
+# Script to put in root directory (ex: /Met1)
+# This script get each file named 'DAQ- Crosshead; … - (Timed).txt' 
+# in sub directories, then it creates .xls files with the formated datas
+
+#####
 
 import os
 from os import listdir
 from os.path import isfile, join, isdir
 import xlwt
 
+#function to convert string data with comma to float 
+def str_to_float(var): 
+    var = var.replace(',','.')
+    var = float(var)
+    return var
+
+#harcoded informations    
 Material = 'Cast Iron'
 Grade = 'FC200'
 Supplier = 'Met1' #should come from folder name
 Test = 'Tensile'
-
 folder_name = 'Met1' #name of the root directory
 file_name = 'DAQ- Crosshead; … - (Timed).txt' #name of the files to get
 
 dir = os.getcwd() #get current directory
-
 dir = dir+'/'+folder_name #create new dir name
 os.chdir(dir) #change directory to /Met1
-
-#files= [f for f in listdir(dir) if isfile(join(dir, f))]
 
 #get the sub directories list
 sub_directories = [d for d in listdir(dir) if isdir(join(dir, d))] 
 
-print(sub_directories)
-
 #sub directories loops
 for a in range(len(sub_directories)):
 
+    #file opening and loading
     file_path = sub_directories[a] + '/' + file_name #path creation
     file = open(file_path, "r", encoding = 'utf8') #file loading
-
     lines = file.readlines() #whole file is loaded in lines
 
     #Properties to fill in Info sheet
@@ -44,13 +51,13 @@ for a in range(len(sub_directories)):
     Original_file = os.path.abspath(file_path) #absolute path
     Test_ID = SAP_ID + '-' + Test_Machine_ID #concatenation of labels
 
-    # Writing in Info sheet of Excel File
+    ##Writing in Info sheet of Excel File
     #Excel file creation
     xls_file = xlwt.Workbook()
     info = xls_file.add_sheet("Info")
     data = xls_file.add_sheet("Data")
 
-    #Filling of info values
+    #Filling of values in Info sheet
     info.write(0,0,'Property')
     info.write(0,1,'Value')
     info.write(1,0,'Material')
@@ -72,7 +79,8 @@ for a in range(len(sub_directories)):
     info.write(9,0,'Test ID')
     info.write(9,1,Test_ID)
 
-    #Filling of data values
+    ##Writing values in Data sheet
+    #Filling of header values in Data sheet
     data.write(0,0,'Crosshead (mm)')
     data.write(0,1,'Load (kN)')
     data.write(0,2,'Time (s)')
@@ -80,51 +88,20 @@ for a in range(len(sub_directories)):
     data.write(0,4,'Axial Strain (mm/mm)')
     data.write(0,5,'Transverse (mm/mm)')
 
-    xls_line = 1 #line in Excel file 
+    #Processing and writing of datas
+    xls_line = 1 #line initialization in Excel file 
 
     for i in range(7, len(lines)):
-        line = lines[i].split() #space séparation
-        
-        xls_row = 0 #row in Excel file
-        for j in line:
-            data.write(xls_line,xls_row,j)
+        line = lines[i].split() #space separation of datas
+        xls_row = 0 #row initialization in Excel file
+        for str_data in line:
+            float_data = str_to_float(str_data) #processing
+            data.write(xls_line, xls_row, float_data) #writing
             xls_row+=1
-        
         xls_line+=1
-
-
-
-        #data.write(a, 0,'value')
-
-
-
-
-
 
     #Saving file
     xls_file_name = Test_Machine_ID + '.xls' #name of the file
     xls_file.save(xls_file_name) #save
     
-
-
-
-
-
-
-
     file.close()
-    A = 1
-
-
-
-
-    
-
-
-
-
-
-
-
-a = 1
-
