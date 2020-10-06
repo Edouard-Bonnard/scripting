@@ -4,24 +4,25 @@
 #####
 
 # ANSYS Scripting Assignment
-# Script to put in root directory (ex: /Met1)
+# Script to put in root directory (same level as Met1)
 # This script get each file named 'DAQ- Crosshead; … - (Timed).txt' 
-# in sub directories, then it creates .xls files with the formated datas
+# in sub directories, then it creates .xls files with the formated datas.
+# Please note that xlwt library is required to execute the script
 
 #####
 
 import os
 from os import listdir
-from os.path import isfile, join, isdir
+from os.path import isfile, join, isdir, basename
 import xlwt
 
-#function to convert string data with comma to float 
+#Function to convert string data with comma to float 
 def str_to_float(var): 
     var = var.replace(',','.')
     var = float(var)
     return var
 
-#harcoded informations    
+#Harcoded informations    
 Material = 'Cast Iron'
 Grade = 'FC200'
 Supplier = 'Met1' #should come from folder name
@@ -33,10 +34,10 @@ dir = os.getcwd() #get current directory
 dir = dir+'/'+folder_name #create new dir name
 os.chdir(dir) #change directory to /Met1
 
-#get the sub directories list
+#Get the sub directories list
 sub_directories = [d for d in listdir(dir) if isdir(join(dir, d))] 
 
-#sub directories loops
+#Sub directories loop
 for a in range(len(sub_directories)):
 
     #file opening and loading
