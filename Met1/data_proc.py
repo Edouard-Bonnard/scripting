@@ -16,6 +16,7 @@
 import os
 from os import listdir
 from os.path import isfile, join, isdir, basename
+from datetime import datetime
 import xlwt
 
 print('#####')
@@ -27,11 +28,17 @@ def str_to_float(var):
     var = float(var)
     return var
 
+#Function to adapt date format
+def date_format(var):
+    var = datetime.strptime(var, '%d/%m/%Y %H:%M:%S')
+    var = var.strftime('%Y-%m-%d %H:%M:%S')
+    return var
+
 dir = os.getcwd() #get current directory
 folder_name = basename(dir) 
 
 #Harcoded informations    
-Material = 'Cast Iron'
+Material = 'Cast iron'
 Grade = 'FC200'
 Supplier = folder_name #should come from folder name
 Test = 'Tensile'
@@ -59,6 +66,7 @@ for a in range(len(sub_directories)):
         SAP_ID = sub_directories[a]
         Test_Machine_ID = lines[1][10:-1] #removal of \n
         Date = lines[2][6:-1] #removal of \n
+        Date = date_format(Date)
         Original_file = os.path.abspath(file_path) #absolute path
         Test_ID = SAP_ID + '-' + Test_Machine_ID #concatenation of labels
 
@@ -67,6 +75,8 @@ for a in range(len(sub_directories)):
         xls_file = xlwt.Workbook()
         info = xls_file.add_sheet("Info")
         data = xls_file.add_sheet("Data")
+
+
 
         #Filling of values in Info sheet
         info.write(0,0,'Property')
