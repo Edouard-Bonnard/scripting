@@ -47,7 +47,7 @@ file_name = 'DAQ- Crosshead; … - (Timed).txt' #name of the files to get
 #Get the sub directories list
 sub_directories = [d for d in listdir(dir) if isdir(join(dir, d))]
 
-cpt_files = 0
+cpt_files = 0 #number of files converted
 
 #Sub directories loop
 for a in range(len(sub_directories)):
@@ -76,11 +76,15 @@ for a in range(len(sub_directories)):
         info = xls_file.add_sheet("Info")
         data = xls_file.add_sheet("Data")
 
-
+        #Style of xls headers
+        header_style = xlwt.XFStyle()
+        font = xlwt.Font()
+        font.bold = True
+        header_style.font = font
 
         #Filling of values in Info sheet
-        info.write(0,0,'Property')
-        info.write(0,1,'Value')
+        info.write(0,0,'Property',style=header_style)
+        info.write(0,1,'Value',style=header_style)
         info.write(1,0,'Material')
         info.write(1,1,Material)
         info.write(2,0,'Grade')
@@ -102,12 +106,12 @@ for a in range(len(sub_directories)):
 
         ##Writing values in Data sheet
         #Filling of header values in Data sheet
-        data.write(0,0,'Crosshead (mm)')
-        data.write(0,1,'Load (kN)')
-        data.write(0,2,'Time (s)')
-        data.write(0,3,'Video Time (s)')
-        data.write(0,4,'Axial Strain (mm/mm)')
-        data.write(0,5,'Transverse (mm/mm)')
+        data.write(0,0,'Crosshead (mm)',style=header_style)
+        data.write(0,1,'Load (kN)',style=header_style)
+        data.write(0,2,'Time (s)',style=header_style)
+        data.write(0,3,'Video Time (s)',style=header_style)
+        data.write(0,4,'Axial Strain (mm/mm)',style=header_style)
+        data.write(0,5,'Transverse (mm/mm)',style=header_style)
 
         #Processing and writing of datas
         xls_line = 1 #line initialization in Excel file 
@@ -130,10 +134,3 @@ for a in range(len(sub_directories)):
 
 print(cpt_files, ' .txt file(s) processed to .xls')
 print('#####')
-
-
-
-
-        
-    
-    
